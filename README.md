@@ -49,6 +49,9 @@ No home-row mods.
 | I+. | `:` |
 | M+N | `-` |
 | N+H | `-` |
+| inner + `n` | F20 Handy toggle |
+| inner + `e` | F19 Handy cancel |
+| inner + `m` | `t` insert |
 
 ### Inner thumb held (HELIX)
 

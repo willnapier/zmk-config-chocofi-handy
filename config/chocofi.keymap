@@ -155,6 +155,28 @@
             layers = <BASE>;
         };
 
+        /* Same-hand chords: inner thumb + letter. Combos beat hold-tap. */
+        combo_handy {
+            timeout-ms = <400>;
+            key-positions = <16 33>;
+            bindings = <&kp F20>;
+            layers = <BASE>;
+        };
+
+        combo_handy_cancel {
+            timeout-ms = <400>;
+            key-positions = <17 33>;
+            bindings = <&kp F19>;
+            layers = <BASE>;
+        };
+
+        combo_insert {
+            timeout-ms = <400>;
+            key-positions = <15 33>;
+            bindings = <&kp T>;
+            layers = <BASE>;
+        };
+
         /* Inner thumb already held → HELIX. Y+' on that layer = bootloader. */
         combo_bootloader {
             timeout-ms = <50>;
