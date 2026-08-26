@@ -155,42 +155,12 @@
             layers = <BASE>;
         };
 
-        /* Same-hand chords: inner thumb + letter. Combos beat hold-tap. */
-        combo_handy {
-            timeout-ms = <500>;
-            key-positions = <16 33>;
-            bindings = <&kp F20>;
-            layers = <BASE>;
-        };
-
-        combo_handy_cancel {
-            timeout-ms = <400>;
-            key-positions = <17 33>;
-            bindings = <&kp F19>;
-            layers = <BASE>;
-        };
-
-        combo_insert {
-            timeout-ms = <400>;
-            key-positions = <15 33>;
-            bindings = <&kp T>;
-            layers = <BASE>;
-        };
-
-        combo_bt_clear {
-            timeout-ms = <400>;
-            key-positions = <19 33>;
-            bindings = <&bt BT_CLR_ALL>;
-            layers = <BASE>;
-        };
-
-        /* Esc chord + inner. 3-key, from rest — not a 2-key BASE bootloader. */
+        /* Esc while inner held (HELIX). Not a BASE 2-key bootloader. */
         combo_bootloader {
             timeout-ms = <80>;
-            require-prior-idle-ms = <1000>;
-            key-positions = <8 9 33>;
+            key-positions = <8 9>;
             bindings = <&bootloader>;
-            layers = <BASE>;
+            layers = <HELIX>;
         };
     };
 
@@ -202,14 +172,14 @@
                 &none  &none  &none  &none  &none      &kp J  &kp L  &kp U  &kp Y  &kp SQT
                 &none  &none  &none  &none  &none      &kp M  &kp N  &kp E  &kp I  &kp O
                 &none  &none  &none  &none  &none      &kp K  &kp H  &comma_semi  &dot_colon  &kp P
-                                &none  &none  &none      &kp RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
+                                &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
             >;
         };
 
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp F20  &kp F19  &none  &bt BT_CLR_ALL
+                &none  &none  &none  &none  &none      &kp T   &kp LG(G)  &kp F19  &none  &bt BT_CLR_ALL
                 &none  &none  &none  &none  &none      &kp X   &trans  &trans  &trans  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;
