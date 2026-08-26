@@ -8,17 +8,16 @@ Shield files are vendored from `willnapier/temper-zmk`. `CONFIG_ZMK_SPLIT=n` so 
 
 ## Hosts
 
-Combos are adjacent home-row pairs, **from rest only** (`require-prior-idle-ms` 1000, `timeout-ms` 300). Mash both keys together; a roll of `e` then `i` will type letters instead. Same combo always selects that host — not a toggle. Combos change the BLE slot only; the letter base stays.
+Host select is on **PAGE** (outer thumb held). Letter-row combos (`n+e` / `e+i` / `i+o`) were removed: they delayed and dropped `n` (and `e`/`i`) after a pause.
 
-| Combo | Profile | Machine |
+| Outer held + | Profile | Machine |
 |-------|---------|---------|
-| **n+e** | 0 | iPhone |
-| **e+i** | 1 | nimbini |
-| **i+o** | 2 | Mac |
+| **J** | 0 | iPhone |
+| **L** | 1 | nimbini |
+| **U** | 2 | Mac |
+| **'** | — | bootloader |
 
-A Mac is one bond. Kindle-on-Mac is the PAGE layer (outer thumb hold), not a fourth profile.
-
-After reboot the bond returns; the layer is the letter base. Pair nimbini first (`e+i`) so slot 1 is the usual computer.
+Nimbini’s first pair landed on slot 0. Kindle-on-Mac is still PAGE arrows on the home row, not a fourth profile.
 
 ## Keys (Temper right-half letters)
 

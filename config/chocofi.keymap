@@ -141,30 +141,6 @@
             layers = <BASE>;
         };
 
-        combo_iphone {
-            timeout-ms = <300>;
-            require-prior-idle-ms = <1000>;
-            key-positions = <16 17>;
-            bindings = <&host_iphone>;
-            layers = <BASE>;
-        };
-
-        combo_nimbini {
-            timeout-ms = <300>;
-            require-prior-idle-ms = <1000>;
-            key-positions = <17 18>;
-            bindings = <&host_nimbini>;
-            layers = <BASE>;
-        };
-
-        combo_mac {
-            timeout-ms = <300>;
-            require-prior-idle-ms = <1000>;
-            key-positions = <18 19>;
-            bindings = <&host_mac>;
-            layers = <BASE>;
-        };
-
         /* Esc while inner held (HELIX). Not a BASE 2-key bootloader. */
         combo_bootloader {
             timeout-ms = <80>;
@@ -197,7 +173,7 @@
 
         page_layer {
             bindings = <
-                &none  &none  &none  &none  &none      &none  &none     &none     &none   &none
+                &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &bootloader
                 &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &none  &none     &none     &none   &none
                                 &none  &none  &none      &trans  &trans  &trans
