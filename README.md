@@ -8,7 +8,7 @@ Shield files are vendored from `willnapier/temper-zmk`. `CONFIG_ZMK_SPLIT=n` so 
 
 ## Hosts
 
-Combos are adjacent home-row pairs, **from rest only** (`require-prior-idle-ms` 1000, `timeout-ms` 80). Same combo always selects that host — not a toggle. Combos change the BLE slot only; the letter base stays.
+Combos are adjacent home-row pairs, **from rest only** (`require-prior-idle-ms` 1000, `timeout-ms` 300). Mash both keys together; a roll of `e` then `i` will type letters instead. Same combo always selects that host — not a toggle. Combos change the BLE slot only; the letter base stays.
 
 | Combo | Profile | Machine |
 |-------|---------|---------|
@@ -58,6 +58,7 @@ No home-row mods.
 | `n` | index home | F20 (Handy toggle) |
 | `e` | middle finger | F19 (Handy cancel) |
 | `i` | ring | unbound (must not send Ctrl/Cmd+Z) |
+| `o` | pinky | `BT_CLR_ALL` (wipe bonds, start advertising) |
 | `k` | index, 1u left, bottom | `x` |
 | `p` (old `/`) | pinky, bottom | `/` |
 

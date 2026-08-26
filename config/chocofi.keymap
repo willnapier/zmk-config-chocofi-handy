@@ -131,7 +131,7 @@
         };
 
         combo_iphone {
-            timeout-ms = <80>;
+            timeout-ms = <300>;
             require-prior-idle-ms = <1000>;
             key-positions = <16 17>;
             bindings = <&host_iphone>;
@@ -139,7 +139,7 @@
         };
 
         combo_nimbini {
-            timeout-ms = <80>;
+            timeout-ms = <300>;
             require-prior-idle-ms = <1000>;
             key-positions = <17 18>;
             bindings = <&host_nimbini>;
@@ -147,7 +147,7 @@
         };
 
         combo_mac {
-            timeout-ms = <80>;
+            timeout-ms = <300>;
             require-prior-idle-ms = <1000>;
             key-positions = <18 19>;
             bindings = <&host_mac>;
@@ -178,7 +178,7 @@
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp F20  &kp F19  &none  &none
+                &none  &none  &none  &none  &none      &kp T   &kp F20  &kp F19  &none  &bt BT_CLR_ALL
                 &none  &none  &none  &none  &none      &kp X   &trans  &trans  &trans  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;
