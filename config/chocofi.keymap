@@ -14,10 +14,11 @@
  *   Middle (34) tap Backspace, hold Shift
  *   Outer  (35) tap Space, hold PAGE
  *
- * Hosts (from rest, require-prior-idle 1000 ms):
- *   n+e → iPhone  (profile 0)
- *   e+i → nimbini (profile 1)
- *   i+o → Mac     (profile 2)
+ * Handy: hold N (tap-preferred 280 ms, same quick-tap-ms as Totem).
+ * Tap N = n / Helix left. Tap-then-hold N = repeat n. Hold-from-rest = F20.
+ * No combos on N (ZMK combos cannot auto-repeat).
+ *
+ * Hosts: outer thumb (PAGE) + J / L / U (iPhone / nimbini / Mac).
  *
  * Boot default: letter base (nimbini slot is the intended pair).
  * Kindle arrows: hold outer thumb (PAGE), not a hidden default layer.
@@ -42,7 +43,7 @@
         thumb_lt: thumb_layer_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            /* hold-preferred: same-hand inner+n must activate HELIX, not tap Enter */
+            /* hold-preferred: inner hold must reach HELIX (F19 cancel, bootloader) */
             flavor = "hold-preferred";
             tapping-term-ms = <180>;
             quick-tap-ms = <QUICK_TAP_MS>;
@@ -58,13 +59,16 @@
             bindings = <&kp>, <&kp>;
         };
 
-        /* Tap = Enter; hold = F20 Handy. No second key. */
-        thumb_handy: thumb_handy_tap {
+        /* Tap N / Helix left; tap-then-hold repeats n; hold-from-rest = F20 Handy.
+         * tap-preferred 280 ms matches Totem N (which holds Shift there).
+         * Do not use hold-preferred: Helix left is a fast tap. */
+        n_handy: n_handy_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "hold-preferred";
-            tapping-term-ms = <180>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <280>;
             quick-tap-ms = <QUICK_TAP_MS>;
+            require-prior-idle-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
 
@@ -142,16 +146,16 @@
         base_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &kp J  &kp L  &kp U  &kp Y  &kp SQT
-                &none  &none  &none  &none  &none      &kp M  &kp N  &kp E  &kp I  &kp O
+                &none  &none  &none  &none  &none      &kp M  &n_handy F20 N  &kp E  &kp I  &kp O
                 &none  &none  &none  &none  &none      &kp K  &kp H  &comma_semi  &dot_colon  &kp P
-                                &none  &none  &none      &thumb_handy F20 RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
+                                &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
             >;
         };
 
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp F20  &kp F19  &none  &bt BT_CLR_ALL
+                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &none  &bt BT_CLR_ALL
                 &none  &none  &none  &none  &none      &kp X   &trans  &trans  &trans  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;

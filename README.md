@@ -16,7 +16,7 @@ Host select is on **PAGE** (outer thumb held). Letter-row combos (`n+e` / `e+i` 
 | **L** | 1 | nimbini |
 | **U** | 2 | Mac |
 | **'** | — | bootloader |
-| **H** | — | `-` (BASE M+N/N+H removed: Helix holds `n` to move left) |
+| **H** | — | `-` |
 
 Nimbini’s first pair landed on slot 0. Kindle-on-Mac is still PAGE arrows on the home row, not a fourth profile.
 
@@ -30,13 +30,13 @@ Nimbini’s first pair landed on slot 0. Kindle-on-Mac is still PAGE arrows on t
  Enter  Bspc Space
 ```
 
-No home-row mods.
+No home-row mods except **N**: tap `n` / Helix left; tap-then-hold repeats `n` (`quick-tap-ms` 175, same as Totem); hold-from-rest (~280 ms, tap-preferred) = **F20 Handy**. No combos include `n`.
 
 ### Thumbs
 
 | Thumb | Tap | Hold |
 |-------|-----|------|
-| **Inner** (Temper Enter) | Enter | **Hold = F20 Handy toggle** |
+| **Inner** (Temper Enter) | Enter | HELIX |
 | **Middle** (Temper Backspace) | Backspace | Shift |
 | **Outer** (Temper Shift; **Space on this device**) | Space | PAGE |
 
@@ -48,17 +48,12 @@ No home-row mods.
 | J+L | `:` |
 | I+. | `:` |
 
-
-| inner + `n` | F20 Handy toggle |
-| inner + `e` | F19 Handy cancel |
-| inner + `m` | `t` insert |
-
 ### Inner thumb held (HELIX)
 
 | Key (unshifted) | Finger | Sends |
 |-----------------|--------|-------|
 | `m` | index, 1u left of home | `t` (Helix insert) |
-| `n` | index home | F20 (backup; primary Handy is **hold inner thumb**) |
+| `n` | index home | `n` (Helix left; Handy is **hold N on BASE**) |
 | `e` | middle finger | F19 (Handy cancel) |
 | `i` | ring | unbound (must not send Ctrl/Cmd+Z) |
 | `o` | pinky | `BT_CLR_ALL` (wipe bonds, start advertising) |
@@ -88,9 +83,9 @@ If this nice!nano already has other firmware, **`settings_reset.uf2` first**, th
 2. Flash **`settings_reset.uf2`** once.
 3. Double-tap reset again.
 4. Flash **`chocofi_right_handy.uf2`**.
-5. Combo **e+i**, pair **Chocofi-Handy** on nimbini.
-6. Combo **i+o**, pair on the Mac.
-7. Combo **n+e**, pair on the iPhone.
+5. Hold **outer thumb + L**, pair **Chocofi-Handy** on nimbini.
+6. Hold **outer thumb + U**, pair on the Mac.
+7. Hold **outer thumb + J**, pair on the iPhone.
 
 Use `cp -X` on macOS if Finder copies grow xattrs and the board rejects the UF2.
 
