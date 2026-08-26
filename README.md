@@ -65,6 +65,8 @@ Undo-paste is base **`u`**.
 
 **Bootloader:** stay on HELIX (inner held) and mash **Y+'**. Not on BASE — Urchin 2-key BASE bootloader combos crashed on boot. Hardware recovery: nice!nano double-tap reset, or RST–GND.
 
+**Sleep / wake:** deep sleep after 15 minutes. The matrix is a `wakeup-source`, so any key (a thumb is easiest) should wake it — do not use the nice!nano reset button for that. Short reset still works if a key does not. Inner-hold + Y+' is bootloader only, and only while already awake.
+
 ### Outer thumb held (PAGE)
 
 | Key | Sends |
