@@ -14,8 +14,9 @@
  *   Middle (34) tap Backspace, hold Shift
  *   Outer  (35) tap Space, hold PAGE
  *
- * Handy: hold N (tap-preferred 280 ms, same quick-tap-ms as Totem).
+ * Handy: hold N (hold-preferred 280 ms, quick-tap-ms 175).
  * Tap N = n / Helix left. Tap-then-hold N = repeat n. Hold-from-rest = F20.
+ * hold-preferred: tap-preferred never promoted to F20 (OS n-repeat instead).
  * No combos on N (ZMK combos cannot auto-repeat).
  *
  * Hosts: outer thumb (PAGE) + J / L / U (iPhone / nimbini / Mac).
@@ -60,15 +61,14 @@
         };
 
         /* Tap N / Helix left; tap-then-hold repeats n; hold-from-rest = F20 Handy.
-         * tap-preferred 280 ms matches Totem N (which holds Shift there).
-         * Do not use hold-preferred: Helix left is a fast tap. */
+         * hold-preferred 280 ms: same class as the inner-thumb Handy that worked.
+         * tap-preferred + prior-idle left N held, so the host OS-repeated n. */
         n_handy: n_handy_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
+            flavor = "hold-preferred";
             tapping-term-ms = <280>;
             quick-tap-ms = <QUICK_TAP_MS>;
-            require-prior-idle-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
 

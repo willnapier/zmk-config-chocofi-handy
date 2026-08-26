@@ -30,7 +30,7 @@ Nimbini’s first pair landed on slot 0. Kindle-on-Mac is still PAGE arrows on t
  Enter  Bspc Space
 ```
 
-No home-row mods except **N**: tap `n` / Helix left; tap-then-hold repeats `n` (`quick-tap-ms` 175, same as Totem); hold-from-rest (~280 ms, tap-preferred) = **F20 Handy**. No combos include `n`.
+No home-row mods except **N**: tap `n` / Helix left; tap-then-hold repeats `n` (`quick-tap-ms` 175, same as Totem); hold-from-rest (~280 ms, **hold-preferred**) = **F20 Handy**. No combos include `n`. If a cold hold of `N` still OS-repeats `n`, the UF2 on the board is not this one (check: inner-thumb hold must **not** start Handy).
 
 ### Thumbs
 
