@@ -1,0 +1,24 @@
+if SHIELD_CHOCOFI_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "Chocofi"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+config ZMK_SPLIT
+    default y
+
+endif
+
+if SHIELD_CHOCOFI_RIGHT
+
+config ZMK_KEYBOARD_NAME
+    default "Chocofi-Handy"
+
+# This repo builds the right half as a standalone central, not a split
+# peripheral. CONFIG_ZMK_SPLIT=n is also set in config/chocofi.conf.
+config ZMK_SPLIT
+    default n
+
+endif

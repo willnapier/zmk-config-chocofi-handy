@@ -1,0 +1,4 @@
+/* No underglow on Will's Chocofi */
+&spi3 {
+    status = "disabled";
+};

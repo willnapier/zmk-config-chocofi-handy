@@ -1,0 +1,196 @@
+/*
+ * Chocofi right-half: Handy remote + Helix DayPage + Kindle clicker
+ *
+ * Standalone BLE (CONFIG_ZMK_SPLIT=n). Right half only.
+ * Temper/Totem muscle memory on the keys that exist on this half.
+ *
+ *     0  1  2  3  4 |  5  6  7  8  9      J L U Y '
+ *    10 11 12 13 14 | 15 16 17 18 19      M N E I O
+ *    20 21 22 23 24 | 25 26 27 28 29      K H , . p
+ *             30 31 32 | 33 34 35         Enter  Bspc  Space
+ *
+ * Thumbs (desk: split-edge on the left of this half):
+ *   Inner  (33) tap Enter, hold HELIX
+ *   Middle (34) tap Backspace, hold Shift
+ *   Outer  (35) tap Space, hold PAGE
+ *
+ * Hosts (from rest, require-prior-idle 1000 ms):
+ *   n+e → iPhone  (profile 0)
+ *   e+i → nimbini (profile 1)
+ *   i+o → Mac     (profile 2)
+ *
+ * Boot default: letter base (nimbini slot is the intended pair).
+ * Kindle arrows: hold outer thumb (PAGE), not a hidden default layer.
+ *
+ * Bootloader: hold inner (HELIX) then Y+' — not on BASE (Urchin 2-key
+ * BASE bootloader combos crashed on boot). Hardware double-tap reset
+ * remains the recovery path.
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+#define BASE  0
+#define HELIX 1
+#define PAGE  2
+
+#define QUICK_TAP_MS 175
+
+/ {
+    behaviors {
+        thumb_lt: thumb_layer_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <QUICK_TAP_MS>;
+            bindings = <&mo>, <&kp>;
+        };
+
+        thumb_mt: thumb_mod_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <QUICK_TAP_MS>;
+            bindings = <&kp>, <&kp>;
+        };
+
+        comma_semi: comma_semi_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp COMMA>, <&kp SEMI>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        dot_colon: dot_colon_morph {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DOT>, <&kp COLON>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+    };
+
+    macros {
+        host_iphone: host_iphone {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &bt BT_SEL 0>;
+        };
+
+        host_nimbini: host_nimbini {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &bt BT_SEL 1>;
+        };
+
+        host_mac: host_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &bt BT_SEL 2>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+
+        combo_esc_right {
+            timeout-ms = <50>;
+            key-positions = <8 9>;
+            bindings = <&kp ESC>;
+            layers = <BASE>;
+        };
+
+        combo_colon {
+            timeout-ms = <40>;
+            key-positions = <5 6>;
+            bindings = <&kp COLON>;
+            layers = <BASE>;
+        };
+
+        combo_colon_vert {
+            timeout-ms = <40>;
+            key-positions = <18 28>;
+            bindings = <&kp COLON>;
+            layers = <BASE>;
+        };
+
+        combo_minus_horiz {
+            timeout-ms = <40>;
+            key-positions = <15 16>;
+            bindings = <&kp MINUS>;
+            layers = <BASE>;
+        };
+
+        combo_minus {
+            timeout-ms = <40>;
+            key-positions = <16 26>;
+            bindings = <&kp MINUS>;
+            layers = <BASE>;
+        };
+
+        combo_iphone {
+            timeout-ms = <80>;
+            require-prior-idle-ms = <1000>;
+            key-positions = <16 17>;
+            bindings = <&host_iphone>;
+            layers = <BASE>;
+        };
+
+        combo_nimbini {
+            timeout-ms = <80>;
+            require-prior-idle-ms = <1000>;
+            key-positions = <17 18>;
+            bindings = <&host_nimbini>;
+            layers = <BASE>;
+        };
+
+        combo_mac {
+            timeout-ms = <80>;
+            require-prior-idle-ms = <1000>;
+            key-positions = <18 19>;
+            bindings = <&host_mac>;
+            layers = <BASE>;
+        };
+
+        /* Inner thumb already held → HELIX. Y+' on that layer = bootloader. */
+        combo_bootloader {
+            timeout-ms = <50>;
+            key-positions = <8 9>;
+            bindings = <&bootloader>;
+            layers = <HELIX>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base_layer {
+            bindings = <
+                &none  &none  &none  &none  &none      &kp J  &kp L  &kp U  &kp Y  &kp SQT
+                &none  &none  &none  &none  &none      &kp M  &kp N  &kp E  &kp I  &kp O
+                &none  &none  &none  &none  &none      &kp K  &kp H  &comma_semi  &dot_colon  &kp P
+                                &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
+            >;
+        };
+
+        helix_layer {
+            bindings = <
+                &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
+                &none  &none  &none  &none  &none      &kp T   &kp F20  &kp F19  &none  &none
+                &none  &none  &none  &none  &none      &kp X   &trans  &trans  &trans  &kp FSLH
+                                &none  &none  &none      &trans  &trans  &trans
+            >;
+        };
+
+        page_layer {
+            bindings = <
+                &none  &none  &none  &none  &none      &none  &none     &none     &none   &none
+                &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
+                &none  &none  &none  &none  &none      &none  &none     &none     &none   &none
+                                &none  &none  &none      &trans  &trans  &trans
+            >;
+        };
+    };
+};

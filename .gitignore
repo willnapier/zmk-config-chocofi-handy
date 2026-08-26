@@ -1,0 +1,9 @@
+.west/
+zmk/
+zephyr/
+modules/
+tools/
+bootloader/
+build/
+*.uf2
+.DS_Store
