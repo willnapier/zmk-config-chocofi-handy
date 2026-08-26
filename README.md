@@ -36,7 +36,7 @@ No home-row mods.
 
 | Thumb | Tap | Hold |
 |-------|-----|------|
-| **Inner** (Temper Enter) | Enter | HELIX |
+| **Inner** (Temper Enter) | Enter | HELIX (hold-preferred; hold then tap `n` for Handy) |
 | **Middle** (Temper Backspace) | Backspace | Shift |
 | **Outer** (Temper Shift; **Space on this device**) | Space | PAGE |
 
