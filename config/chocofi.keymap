@@ -58,6 +58,16 @@
             bindings = <&kp>, <&kp>;
         };
 
+        /* Tap = Enter; hold = F20 Handy. No second key. */
+        thumb_handy: thumb_handy_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <180>;
+            quick-tap-ms = <QUICK_TAP_MS>;
+            bindings = <&kp>, <&kp>;
+        };
+
         comma_semi: comma_semi_morph {
             compatible = "zmk,behavior-mod-morph";
             #binding-cells = <0>;
@@ -172,14 +182,14 @@
                 &none  &none  &none  &none  &none      &kp J  &kp L  &kp U  &kp Y  &kp SQT
                 &none  &none  &none  &none  &none      &kp M  &kp N  &kp E  &kp I  &kp O
                 &none  &none  &none  &none  &none      &kp K  &kp H  &comma_semi  &dot_colon  &kp P
-                                &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
+                                &none  &none  &none      &thumb_handy F20 RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
             >;
         };
 
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp LG(G)  &kp F19  &none  &bt BT_CLR_ALL
+                &none  &none  &none  &none  &none      &kp T   &kp F20  &kp F19  &none  &bt BT_CLR_ALL
                 &none  &none  &none  &none  &none      &kp X   &trans  &trans  &trans  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;

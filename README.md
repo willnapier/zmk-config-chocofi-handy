@@ -36,7 +36,7 @@ No home-row mods.
 
 | Thumb | Tap | Hold |
 |-------|-----|------|
-| **Inner** (Temper Enter) | Enter | (Handy is inner+`n` combo, not a hold) |
+| **Inner** (Temper Enter) | Enter | **Hold = F20 Handy toggle** |
 | **Middle** (Temper Backspace) | Backspace | Shift |
 | **Outer** (Temper Shift; **Space on this device**) | Space | PAGE |
 
@@ -58,7 +58,7 @@ No home-row mods.
 | Key (unshifted) | Finger | Sends |
 |-----------------|--------|-------|
 | `m` | index, 1u left of home | `t` (Helix insert) |
-| `n` | index home | Super+G (niri Handy toggle) |
+| `n` | index home | F20 (backup; primary Handy is **hold inner thumb**) |
 | `e` | middle finger | F19 (Handy cancel) |
 | `i` | ring | unbound (must not send Ctrl/Cmd+Z) |
 | `o` | pinky | `BT_CLR_ALL` (wipe bonds, start advertising) |
