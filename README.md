@@ -16,6 +16,7 @@ Host select is on **PAGE** (outer thumb held). Letter-row combos (`n+e` / `e+i` 
 | **L** | 1 | nimbini |
 | **U** | 2 | Mac |
 | **'** | — | bootloader |
+| **H** | — | `-` (was M+N / N+H on BASE; those combos made `n` wait) |
 
 Nimbini’s first pair landed on slot 0. Kindle-on-Mac is still PAGE arrows on the home row, not a fourth profile.
 
@@ -46,8 +47,7 @@ No home-row mods.
 | Y+' | Esc |
 | J+L | `:` |
 | I+. | `:` |
-| M+N | `-` |
-| N+H | `-` |
+
 | inner + `n` | F20 Handy toggle |
 | inner + `e` | F19 Handy cancel |
 | inner + `m` | `t` insert |

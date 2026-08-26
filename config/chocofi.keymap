@@ -127,20 +127,6 @@
             layers = <BASE>;
         };
 
-        combo_minus_horiz {
-            timeout-ms = <40>;
-            key-positions = <15 16>;
-            bindings = <&kp MINUS>;
-            layers = <BASE>;
-        };
-
-        combo_minus {
-            timeout-ms = <40>;
-            key-positions = <16 26>;
-            bindings = <&kp MINUS>;
-            layers = <BASE>;
-        };
-
         /* Esc while inner held (HELIX). Not a BASE 2-key bootloader. */
         combo_bootloader {
             timeout-ms = <80>;
@@ -175,7 +161,7 @@
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &bootloader
                 &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
-                &none  &none  &none  &none  &none      &none  &none     &none     &none   &none
+                &none  &none  &none  &none  &none      &none  &kp MINUS  &none     &none   &none
                                 &none  &none  &none      &trans  &trans  &trans
             >;
         };
