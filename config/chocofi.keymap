@@ -127,20 +127,6 @@
             layers = <BASE>;
         };
 
-        /* Totem/Temper: 40ms mash, no idle guard (same as totem.keymap). */
-        combo_minus_horiz {
-            timeout-ms = <40>;
-            key-positions = <15 16>;
-            bindings = <&kp MINUS>;
-            layers = <BASE>;
-        };
-        combo_minus {
-            timeout-ms = <40>;
-            key-positions = <16 26>;
-            bindings = <&kp MINUS>;
-            layers = <BASE>;
-        };
-
         /* Esc while inner held (HELIX). Not a BASE 2-key bootloader. */
         combo_bootloader {
             timeout-ms = <80>;
