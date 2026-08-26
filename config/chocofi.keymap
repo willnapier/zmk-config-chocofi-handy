@@ -157,7 +157,7 @@
 
         /* Same-hand chords: inner thumb + letter. Combos beat hold-tap. */
         combo_handy {
-            timeout-ms = <400>;
+            timeout-ms = <500>;
             key-positions = <16 33>;
             bindings = <&kp F20>;
             layers = <BASE>;
@@ -177,12 +177,20 @@
             layers = <BASE>;
         };
 
-        /* Inner thumb already held → HELIX. Y+' on that layer = bootloader. */
+        combo_bt_clear {
+            timeout-ms = <400>;
+            key-positions = <19 33>;
+            bindings = <&bt BT_CLR_ALL>;
+            layers = <BASE>;
+        };
+
+        /* Esc chord + inner. 3-key, from rest — not a 2-key BASE bootloader. */
         combo_bootloader {
-            timeout-ms = <50>;
-            key-positions = <8 9>;
+            timeout-ms = <80>;
+            require-prior-idle-ms = <1000>;
+            key-positions = <8 9 33>;
             bindings = <&bootloader>;
-            layers = <HELIX>;
+            layers = <BASE>;
         };
     };
 
@@ -194,7 +202,7 @@
                 &none  &none  &none  &none  &none      &kp J  &kp L  &kp U  &kp Y  &kp SQT
                 &none  &none  &none  &none  &none      &kp M  &kp N  &kp E  &kp I  &kp O
                 &none  &none  &none  &none  &none      &kp K  &kp H  &comma_semi  &dot_colon  &kp P
-                                &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
+                                &none  &none  &none      &kp RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
             >;
         };
 
