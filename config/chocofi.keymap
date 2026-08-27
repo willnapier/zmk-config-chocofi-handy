@@ -152,6 +152,13 @@
             >;
         };
 
+        /* HAZARD: col 5 of the home row below (under O) is &bt BT_CLR_ALL —
+         * a single unmodified tap that wipes ALL BLE bonds, two keys from the
+         * F19 used for Handy cancel. Reachable since 62c937c made the inner
+         * thumb a layer-tap; on bf81949 this layer could not be reached at all.
+         * Guard it behind a hold-tap or combo, but do NOT remove it: it is the
+         * only in-band bond clear, and lacking one cost an afternoon 2026-08-27.
+         * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
@@ -161,6 +168,9 @@
             >;
         };
 
+        /* HAZARD: col 5 of the top row below (under ;) is &bootloader — a
+         * single unmodified tap that reboots into the UF2 bootloader, sitting
+         * right beside the host-select keys you actually use. Guard it. */
         page_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &bootloader

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Fires before the push that triggers the GHA build that produces the UF2 you
+# are about to flash. Advisory only — never blocks.
+#
+# Added 2026-08-27 at Will's request, so the deferred keymap guards are not
+# silently deferred forever. Delete this hook once they are guarded.
+
+changed=$(git diff --name-only @{push}..HEAD 2>/dev/null || git diff --name-only origin/main..HEAD 2>/dev/null)
+echo "$changed" | rg -q "config/chocofi.keymap" || exit 0
+
+bat >&2 <<'MSG'
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  KEYMAP CHANGE → this push builds a UF2 you will flash.              │
+│  Deferred work that should ride along with THIS flash:               │
+└──────────────────────────────────────────────────────────────────────┘
+
+  Two destructive bindings are single unmodified taps, pinky column,
+  on thumb-held layers. Neither has a hold-tap, combo or confirmation.
+
+    helix_layer, home row, col 5 (under O)   ->  &bt BT_CLR_ALL
+        wipes ALL BLE bonds. Two keys from the F19 you press for Handy
+        cancel. Recovering from this cost an afternoon on 2026-08-27.
+
+    page_layer,  top row,  col 5 (under ;)   ->  &bootloader
+        drops into the UF2 bootloader, right beside the host-select keys.
+
+  Guard both behind a hold-tap or a deliberate combo. Keep BT_CLR_ALL
+  reachable — it is the only in-band bond clear, and on bf81949 its
+  absence was the problem.
+
+  Background: ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md
+
+  (advisory only — the push continues)
+
+MSG
+exit 0
