@@ -8,30 +8,37 @@
 changed=$(git diff --name-only @{push}..HEAD 2>/dev/null || git diff --name-only origin/main..HEAD 2>/dev/null)
 echo "$changed" | rg -q "config/chocofi.keymap" || exit 0
 
-bat >&2 <<'MSG'
+# Only warn if a destructive binding is still on a BARE LAYER KEY. Combo
+# bindings live on their own `bindings = <...>;` line, so excluding those
+# distinguishes "guarded" from "unguarded". Without this test the hook fired
+# on every keymap push, including the one that fixed the problem - and a
+# guard that always fires trains you to ignore it.
+unguarded=$(rg -n '&(bt BT_CLR_ALL|bootloader)' config/chocofi.keymap \
+    | rg -v 'bindings = <' | rg -v '^\s*[0-9]+:\s*\*' | rg -v '^\s*[0-9]+:\s*/\*')
 
+if [ -z "$unguarded" ]; then
+    exit 0
+fi
+
+cat <<'BANNER'
 ┌──────────────────────────────────────────────────────────────────────┐
 │  KEYMAP CHANGE → this push builds a UF2 you will flash.              │
-│  Deferred work that should ride along with THIS flash:               │
+│  A DESTRUCTIVE BINDING IS ON A BARE KEY:                             │
 └──────────────────────────────────────────────────────────────────────┘
+BANNER
+echo "$unguarded"
+cat <<'BANNER'
 
-  Two destructive bindings are single unmodified taps, pinky column,
-  on thumb-held layers. Neither has a hold-tap, combo or confirmation.
+  Guard it behind a deliberate combo. Keep BT_CLR_ALL reachable — it is
+  the only in-band bond clear, and on bf81949 its absence was the problem.
 
-    helix_layer, home row, col 5 (under O)   ->  &bt BT_CLR_ALL
-        wipes ALL BLE bonds. Two keys from the F19 you press for Handy
-        cancel. Recovering from this cost an afternoon on 2026-08-27.
-
-    page_layer,  top row,  col 5 (under ;)   ->  &bootloader
-        drops into the UF2 bootloader, right beside the host-select keys.
-
-  Guard both behind a hold-tap or a deliberate combo. Keep BT_CLR_ALL
-  reachable — it is the only in-band bond clear, and on bf81949 its
-  absence was the problem.
+  Guarded as of 2026-08-28:
+    combo_bt_clr     HELIX, positions 15+19 (both ends of the home row)
+    combo_bootloader HELIX, positions 8+9   (Y + ')
 
   Background: ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md
 
   (advisory only — the push continues)
+BANNER
 
-MSG
 exit 0
