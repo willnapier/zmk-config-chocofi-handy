@@ -51,6 +51,26 @@
             bindings = <&mo>, <&kp>;
         };
 
+        /* The OUTER thumb is Space, and Helix uses Space as its leader key.
+         * Under hold-preferred a slightly slow Space commits to the layer the
+         * moment the tapping term expires, so Space+U - the DayPage flush -
+         * became PAGE+U, which is &host_mac: the board silently jumps to the
+         * Mac BT profile and presents as "the keyboard has stopped working".
+         * Space+J (iPhone) and Space+' (bootloader) were the same hazard.
+         *
+         * tap-preferred resolves a letter pressed during the tapping term as
+         * a TAP, so Space+<letter> is always Space then letter. A bare hold
+         * with no other key still reaches PAGE, so the layer is unaffected.
+         * The INNER thumb keeps hold-preferred: it must reach HELIX. */
+        page_lt: page_layer_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <180>;
+            quick-tap-ms = <QUICK_TAP_MS>;
+            bindings = <&mo>, <&kp>;
+        };
+
         thumb_mt: thumb_mod_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -131,6 +151,16 @@
             layers = <BASE>;
         };
 
+        /* Bond clear, moved off a bare key 2026-08-28. Positions 15 and 19
+         * are the two ENDS of the HELIX home row, so it needs the inner thumb
+         * held plus index and pinky together - three deliberate actions. */
+        combo_bt_clr {
+            timeout-ms = <60>;
+            key-positions = <15 19>;
+            bindings = <&bt BT_CLR_ALL>;
+            layers = <HELIX>;
+        };
+
         /* Esc while inner held (HELIX). Not a BASE 2-key bootloader. */
         combo_bootloader {
             timeout-ms = <80>;
@@ -148,32 +178,34 @@
                 &none  &none  &none  &none  &none      &kp J  &kp L  &kp U  &kp Y  &kp SQT
                 &none  &none  &none  &none  &none      &kp M  &n_handy F20 N  &kp E  &kp I  &kp O
                 &none  &none  &none  &none  &none      &kp K  &kp H  &comma_semi  &dot_colon  &kp P
-                                &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &thumb_lt PAGE SPACE
+                                &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &page_lt PAGE SPACE
             >;
         };
 
-        /* HAZARD: col 5 of the home row below (under O) is &bt BT_CLR_ALL —
-         * a single unmodified tap that wipes ALL BLE bonds, two keys from the
-         * F19 used for Handy cancel. Reachable since 62c937c made the inner
-         * thumb a layer-tap; on bf81949 this layer could not be reached at all.
-         * Guard it behind a hold-tap or combo, but do NOT remove it: it is the
-         * only in-band bond clear, and lacking one cost an afternoon 2026-08-27.
+        /* GUARDED 2026-08-28. Position 19 (under O) was a bare &bt BT_CLR_ALL:
+         * one unmodified tap wiping ALL BLE bonds, two keys from the F19 used
+         * for Handy cancel. It is NOT removed - it is the only in-band bond
+         * clear, and lacking one cost an afternoon on 2026-08-27 - it moved to
+         * combo_bt_clr (HELIX, positions 15+19), which needs the inner thumb
+         * held AND both ends of that row at once.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &none  &bt BT_CLR_ALL
+                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &none  &none
                 &none  &none  &none  &none  &none      &kp X   &trans  &trans  &trans  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;
         };
 
-        /* HAZARD: col 5 of the top row below (under ;) is &bootloader — a
-         * single unmodified tap that reboots into the UF2 bootloader, sitting
-         * right beside the host-select keys you actually use. Guard it. */
+        /* GUARDED 2026-08-28. Position 9 (under ') was a bare &bootloader:
+         * one unmodified tap rebooting into the UF2 bootloader, immediately
+         * beside the host-select keys in daily use. Now &none. The bootloader
+         * is still reachable, deliberately, via combo_bootloader on HELIX
+         * (inner thumb held, then Y+'). */
         page_layer {
             bindings = <
-                &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &bootloader
+                &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
                 &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &none  &kp MINUS  &none     &none   &none
                                 &none  &none  &none      &trans  &trans  &trans
