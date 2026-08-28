@@ -203,11 +203,20 @@
          * beside the host-select keys in daily use. Now &none. The bootloader
          * is still reachable, deliberately, via combo_bootloader on HELIX
          * (inner thumb held, then Y+'). */
+        /* Bottom row is niri window focus, in the SAME COLUMNS as the arrows
+         * directly above it: Mod+Shift+Left/Down/Up/Right. Lets the right
+         * half alone move focus between windows without reaching for the pair.
+         *
+         * MINUS moved from H to K (position 25). Column 1 on the bottom row is
+         * the index finger's down-AND-inward reach - the worst key on the
+         * board, which is why the arrow row leaves position 15 empty. The rare
+         * binding gets the awkward key; the four new ones get comfortable
+         * columns and align with N E I O above. */
         page_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
                 &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
-                &none  &none  &none  &none  &none      &none  &kp MINUS  &none     &none   &none
+                &none  &none  &none  &none  &none      &kp MINUS  &kp LG(LS(LEFT))  &kp LG(LS(DOWN))  &kp LG(LS(UP))  &kp LG(LS(RIGHT))
                                 &none  &none  &none      &trans  &trans  &trans
             >;
         };
