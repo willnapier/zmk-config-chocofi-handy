@@ -151,12 +151,15 @@
             layers = <BASE>;
         };
 
-        /* Bond clear, moved off a bare key 2026-08-28. Positions 15 and 19
-         * are the two ENDS of the HELIX home row, so it needs the inner thumb
-         * held plus index and pinky together - three deliberate actions. */
+        /* Bond clear, moved off a bare key 2026-08-28, then off the HOME row
+         * later the same day: 15 is `t` (insert mode, pressed constantly) and
+         * 19 became F19, so a roll between them would have wiped every bond.
+         * Now the two ENDS of the BOTTOM row - inner thumb held plus index and
+         * pinky spread across the row. Three deliberate actions, and nowhere
+         * near anything pressed while reading. */
         combo_bt_clr {
             timeout-ms = <60>;
-            key-positions = <15 19>;
+            key-positions = <25 29>;
             bindings = <&bt BT_CLR_ALL>;
             layers = <HELIX>;
         };
@@ -189,10 +192,21 @@
          * combo_bt_clr (HELIX, positions 15+19), which needs the inner thumb
          * held AND both ends of that row at once.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
+        /* HELIX home row, right hand:
+         *   M -> t          enter INSERT (t is a LEFT-hand key in Colemak-DH,
+         *                   so this is the only route to insert from this half)
+         *   N -> n          plain letter, bypassing the F20 hold-tap
+         *   E -> Shift+PgDn  scroll DOWN   ] WezTerm half-page: intercepted by
+         *   I -> Shift+PgUp  scroll UP     ] the terminal, so it works
+         *                                  ] identically in Claude Code, Codex
+         *                                  ] and Grok, unlike their own keys
+         *   O -> F19        Handy cancel (moved from E 2026-08-28: cancel is
+         *                   rare, scrolling is constant)
+         * E/I match the PAGE arrow row above them - down then up. */
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &none  &none
+                &none  &none  &none  &none  &none      &kp T   &kp N  &kp LS(PG_DN)  &kp LS(PG_UP)  &kp F19
                 &none  &none  &none  &none  &none      &kp X   &trans  &trans  &trans  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;
