@@ -33,7 +33,7 @@ cat <<'BANNER'
   the only in-band bond clear, and on bf81949 its absence was the problem.
 
   Guarded as of 2026-08-28:
-    combo_bt_clr     HELIX, positions 25+29 (K+P, both ends of the bottom row)
+    combo_bt_clr     HELIX, positions 15+19 (both ends of the home row)
     combo_bootloader HELIX, positions 8+9   (Y + ')
 
   Background: ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md
