@@ -81,13 +81,23 @@
         };
 
         /* Tap N / Helix left; tap-then-hold repeats n; hold-from-rest = F20 Handy.
-         * hold-preferred 280 ms: same class as the inner-thumb Handy that worked.
-         * tap-preferred + prior-idle left N held, so the host OS-repeated n. */
+         * hold-preferred: same class as the inner-thumb Handy that worked.
+         * tap-preferred + prior-idle left N held, so the host OS-repeated n.
+         *
+         * 280 -> 400 ms on 2026-08-30. Being a hold-tap, `n` is NEVER sent on
+         * key-down; it is synthesised on RELEASE, and any press past the term
+         * becomes F20 instead - a silent Handy toggle with no character at
+         * all. At 280 ms a merely lazy tap crossed that cliff, which is why
+         * `n` felt intermittent ("sometimes it works, sometimes not") when the
+         * hardware was fine. Measured tap durations on this board's plain keys
+         * are ~100-120 ms, so 400 ms leaves a wide margin while a deliberate
+         * dictation hold still reaches F20 comfortably.
+         * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         n_handy: n_handy_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "hold-preferred";
-            tapping-term-ms = <280>;
+            tapping-term-ms = <400>;
             quick-tap-ms = <QUICK_TAP_MS>;
             bindings = <&kp>, <&kp>;
         };
@@ -250,13 +260,20 @@
          * because positional hold-tap only guards a key pressed DURING the
          * tapping term - it cannot guard a thumb already held past it.
          *
-         * If this needs fixing rather than living with, the cheap route is to
-         * move LEFT to position 15 (currently &none) and accept M E I O.
+         * DONE 2026-08-30: LEFT moved to position 15 (M) and 16 is now &none.
+         * The cursor row is therefore M E I O, not N E I O. It loses the
+         * Colemak-DH N-alignment, but both rows now work: cursor movement on
+         * 15/17/18/19 and niri window focus on 26/27/28/29, which is what was
+         * actually wanted. 16 is left &none deliberately - as &kp LEFT it fell
+         * through to BASE and typed a held `n`, which is worse than nothing.
+         *
+         * Positions 17/18/19 are untouched, so down/up/right keep their homes;
+         * only left moved, one column inward to the inner-index reach.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         page_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
-                &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
+                &none  &none  &none  &none  &none      &kp LEFT  &none  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &kp MINUS  &kp LG(LS(LEFT))  &kp LG(LS(DOWN))  &kp LG(LS(UP))  &kp LG(LS(RIGHT))
                                 &none  &none  &none      &trans  &trans  &trans
             >;
