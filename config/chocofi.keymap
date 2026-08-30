@@ -189,8 +189,9 @@
          * one unmodified tap wiping ALL BLE bonds, two keys from the F19 used
          * for Handy cancel. It is NOT removed - it is the only in-band bond
          * clear, and lacking one cost an afternoon on 2026-08-27 - it moved to
-         * combo_bt_clr (HELIX, positions 15+19), which needs the inner thumb
-         * held AND both ends of that row at once.
+         * combo_bt_clr, which needs the inner thumb held AND both ends of a row
+         * at once. It moved again the same day, to positions 25+29 (K+P on
+         * the BOTTOM row) - see the combo itself.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         /* HELIX, right hand:
          *   M -> t            enter INSERT (t is a LEFT-hand key in Colemak-DH,
@@ -232,6 +233,26 @@
          * board, which is why the arrow row leaves position 15 empty. The rare
          * binding gets the awkward key; the four new ones get comfortable
          * columns and align with N E I O above. */
+        /* 🚨 POSITION 16 DOES NOT WORK ON THIS LAYER. MEASURED 2026-08-30.
+         * `&kp LEFT` below has been here since the FIRST commit (5a4f2db) and
+         * there is no evidence it has EVER fired. Outer thumb + N emits
+         * nothing, or falls through to BASE and gives a held `n`, while
+         * 17/18/19 (DOWN/UP/RIGHT) and 25/26/29 all resolve on PAGE correctly
+         * in the same held-thumb window. Position 16 works fine on BASE (n,
+         * F20) and on HELIX (n) - it is this layer specifically.
+         *
+         * Position 16 is the only key on this row carrying a hold-tap on BASE
+         * (&n_handy F20 N). That asymmetry is the whole suspect list.
+         *
+         * ALREADY TRIED AND REVERTED - do not repeat: hold-preferred plus
+         * hold-trigger-key-positions on page_lt (4ce83e6). It did NOT fix
+         * position 16, and it re-opened the Space+U -> &host_mac hazard,
+         * because positional hold-tap only guards a key pressed DURING the
+         * tapping term - it cannot guard a thumb already held past it.
+         *
+         * If this needs fixing rather than living with, the cheap route is to
+         * move LEFT to position 15 (currently &none) and accept M E I O.
+         * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         page_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
