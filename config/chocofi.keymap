@@ -52,22 +52,35 @@
         };
 
         /* The OUTER thumb is Space, and Helix uses Space as its leader key.
-         * Under hold-preferred a slightly slow Space commits to the layer the
-         * moment the tapping term expires, so Space+U - the DayPage flush -
-         * became PAGE+U, which is &host_mac: the board silently jumps to the
-         * Mac BT profile and presents as "the keyboard has stopped working".
-         * Space+J (iPhone) and Space+' (bootloader) were the same hazard.
+         * Under plain hold-preferred a slightly slow Space commits to the
+         * layer the moment the tapping term expires, so Space+U - the DayPage
+         * flush - became PAGE+U, which is &host_mac: the board silently jumps
+         * to the Mac BT profile and presents as "the keyboard has stopped
+         * working". Space+J (iPhone) was the same hazard.
          *
-         * tap-preferred resolves a letter pressed during the tapping term as
-         * a TAP, so Space+<letter> is always Space then letter. A bare hold
-         * with no other key still reaches PAGE, so the layer is unaffected.
-         * The INNER thumb keeps hold-preferred: it must reach HELIX. */
+         * 2026-08-28 fixed that with tap-preferred. 2026-08-30 MEASURED that
+         * the cure broke the arrow row: with tap-preferred on this thumb,
+         * position 16 fell through to BASE and emitted a held `n` instead of
+         * LEFT, while 17/18/19/25/26 resolved on PAGE correctly. Position 16
+         * is the only key on that row carrying a hold-tap on BASE
+         * (&n_handy F20 N), and the INNER thumb - hold-preferred - reached
+         * position 16 on HELIX without trouble. The thumb FLAVOUR was the
+         * variable, not the binding.
+         *
+         * So: back to hold-preferred, with POSITIONAL hold-tap doing the
+         * guarding instead. Only the nav rows may promote this thumb to a
+         * hold. Positions 5/6/7 - J/L/U, the three host-select keys - are
+         * deliberately ABSENT, so Space+J/L/U still resolves as a TAP and the
+         * Mac-profile hazard stays fixed. A bare hold with no other key still
+         * reaches PAGE, so the Kindle arrows are unaffected.
+         * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         page_lt: page_layer_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
+            flavor = "hold-preferred";
             tapping-term-ms = <180>;
             quick-tap-ms = <QUICK_TAP_MS>;
+            hold-trigger-key-positions = <15 16 17 18 19 25 26 27 28 29>;
             bindings = <&mo>, <&kp>;
         };
 
@@ -189,8 +202,9 @@
          * one unmodified tap wiping ALL BLE bonds, two keys from the F19 used
          * for Handy cancel. It is NOT removed - it is the only in-band bond
          * clear, and lacking one cost an afternoon on 2026-08-27 - it moved to
-         * combo_bt_clr (HELIX, positions 15+19), which needs the inner thumb
-         * held AND both ends of that row at once.
+         * combo_bt_clr, which needs the inner thumb held AND both ends of a row
+         * at once. It moved again the same day, to positions 25+29 (K+P on
+         * the BOTTOM row) - see the combo itself.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         /* HELIX, right hand:
          *   M -> t            enter INSERT (t is a LEFT-hand key in Colemak-DH,
