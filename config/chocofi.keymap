@@ -326,25 +326,17 @@
          * board, which is why the arrow row leaves position 15 empty. The rare
          * binding gets the awkward key; the four new ones get comfortable
          * columns and align with N E I O above. */
-        /* ⚠️ RETRACTED 2026-08-31. This block previously asserted "position
-         * 16 does not work on this layer", and it was WRONG. Measured with
-         * chocofi-trace: outer thumb + N emits cleanly (F13 fired three times
-         * from this position in a diagnostic image, including a 2.0 s hold).
+        /* ✅ RESOLVED 2026-08-31 — THE `N` SWITCH HAD FAILED. Nothing here
+         * was ever wrong. This block previously claimed position 16 did not
+         * work on this layer; it was a hardware fault producing 0.1 ms phantom
+         * presses (46 of 70 under 25 ms, four phantom `U` — its own matrix
+         * column-neighbour). Switch replaced, no firmware change, left-arrow
+         * then gave 14 clean bare events at 75-120 ms.
          *
-         * The real defect was ROLL SENSITIVITY on the page thumb, not a dead
-         * position. Under tap-preferred the hold arrived only on term expiry,
-         * so a letter pressed inside 180 ms left the thumb resolving as a TAP:
-         * a bare Space, letter swallowed. Deliberate press worked; fast roll
-         * silently did not. Fixed by balanced + hold-trigger-key-positions on
-         * page_lt above.
-         *
-         * 🚨 METHOD NOTE, because this cost most of a day: every "the board
-         * emitted nothing" reading that led to the false finding came from an
-         * instrument fault or a technique difference - a tracer watching the
-         * BLE node while USB carried the traffic, a stale fd after a
-         * reconnect, an expired tracer, and one test where the wrong thumb was
-         * held. MEASURE THE MEASURER FIRST. A negative result from an
-         * uncorroborated instrument is not evidence.
+         * 🚨 Before theorising about firmware for a key that "sometimes"
+         * works, COUNT IT: ~40 presses of the suspect key and ~40 of a
+         * neighbour with `chocofi-trace`. Presses under 25 ms, gaps under
+         * 60 ms, or phantoms from the same matrix row/column mean hardware.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         page_layer {
             bindings = <
