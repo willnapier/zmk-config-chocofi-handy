@@ -291,11 +291,33 @@
          *                     so this is the only route to insert from this half)
          *   N -> n            plain letter, bypassing the F20 hold-tap
          *   E -> F19          Handy cancel
-         *   , -> Shift+PgDn   scroll DOWN  ] WezTerm half-page. Shift+Page* is a
-         *   . -> Shift+PgUp   scroll UP    ] WezTerm key assignment, intercepted
-         *                                  ] before the app sees it, so it is
-         *                                  ] identical in Claude Code, Codex and
-         *                                  ] Grok - unlike their own scroll keys
+         *   , -> PgDn          scroll DOWN  ] BARE page keys, handled by the
+         *   . -> PgUp          scroll UP    ] APPLICATION
+         *   I -> Shift+PgDn    scroll DOWN  ] WezTerm scrollback, handled by
+         *   O -> Shift+PgUp    scroll UP    ] the TERMINAL
+         *
+         * 🚨 TWO PAIRS, MEASURED 2026-08-31 — NEITHER IS UNIVERSAL. The old
+         * comment here claimed Shift+Page* was "identical in Claude Code,
+         * Codex and Grok". That was reasoned, not tested, and it is FALSE:
+         *
+         *              Shift+Page (terminal)   bare Page (application)
+         *   Codex            WORKS                    fails
+         *   Claude Code      fails                    WORKS
+         *   Grok             fails                    WORKS
+         *
+         * The split is the ALTERNATE SCREEN. Codex renders into the normal
+         * buffer, so WezTerm's scrollback is real and its Shift+Page key
+         * assignment has something to move. Claude Code and Grok hold the alt
+         * screen, where that scrollback is frozen - and because WezTerm
+         * CONSUMES the key for its own assignment, it never reaches them
+         * either. Bare page keys bypass the terminal and let each app scroll
+         * itself.
+         *
+         * BARE gets , and . because that is what the Totem and Temper NAV
+         * layers already send on those same two physical keys - one meaning
+         * system-wide - and because it covers three tools to Codex's one.
+         * Shift+Page moves to I and O, which were &none. Deliberately NOT u
+         * or y: those are &trans here and fall through to Helix undo/yank.
          *   K -> x, P -> /    extend-line, search
          *
          * SCROLL IS ON , AND . ON PURPOSE, not on E/I. Across the whole system
@@ -306,8 +328,8 @@
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &none  &none
-                &none  &none  &none  &none  &none      &kp X   &trans  &kp LS(PG_DN)  &kp LS(PG_UP)  &kp FSLH
+                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &kp LS(PG_DN)  &kp LS(PG_UP)
+                &none  &none  &none  &none  &none      &kp X   &trans  &kp PG_DN  &kp PG_UP  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;
         };
