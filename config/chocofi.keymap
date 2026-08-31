@@ -65,9 +65,31 @@
         page_lt: page_layer_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
+            /* balanced + positional, settled 2026-08-31 by measurement.
+             *
+             * tap-preferred (2026-08-28) fixed the Space+U hazard but made the
+             * thumb ROLL-SENSITIVE: the hold arrives only on term expiry, so a
+             * letter pressed before 180 ms left the thumb resolving as a TAP -
+             * you got a bare Space and the letter was swallowed. That is what
+             * presented for a whole evening as "position 16 is dead". It never
+             * was: pressed deliberately, outer thumb + N emits correctly.
+             *
+             * balanced takes the hold when another key is pressed AND released
+             * while the thumb is held, so a fast roll now reaches PAGE instead
+             * of emitting Space.
+             *
+             * hold-trigger-key-positions keeps the guard: only the NAV ROWS may
+             * promote this thumb to a hold. 5/6/7 - J/L/U, the host-select keys
+             * - are deliberately ABSENT, so Space+J/L/U still resolves as a tap
+             * and the Mac-profile hazard stays shut.
+             *
+             * NOT hold-preferred: that commits to the layer on ANY key press,
+             * which is the original 2026-08-28 hazard. Tried 4ce83e6, reverted.
+             * See ~/Assistants/skills/zmk/references/urob-patterns.md */
+            flavor = "balanced";
             tapping-term-ms = <180>;
             quick-tap-ms = <QUICK_TAP_MS>;
+            hold-trigger-key-positions = <15 16 17 18 19 25 26 27 28 29>;
             bindings = <&mo>, <&kp>;
         };
 
@@ -99,33 +121,23 @@
          * should feel immediate. Measured tap durations on this board's plain
          * keys are ~90-120 ms, so a normal `m` still resolves as a tap.
          *
-         * 🚨 IT ALSO TESTS THE POSITION-16 HYPOTHESIS. The dead PAGE position
-         * tracked the HOLD-TAP, not the key: 16 carried one and was dead on
-         * PAGE, 15 carried none and worked. Moving the hold-tap to 15 should
-         * move the dead PAGE position to 15 with it, freeing 16 for LEFT and
-         * restoring the Colemak N E I O alignment. If 16 is STILL dead after
-         * this, the hypothesis is wrong - revert to 81e8d98, which has LEFT
-         * on 15 and works. See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
+         * (An earlier version of this comment claimed the move would also test
+         * a "dead position 16 tracks the hold-tap" hypothesis. That hypothesis
+         * was refuted on 2026-08-31 - position 16 was never dead. M remains
+         * the right home for the hold-tap on its own merits: `m` is the rare
+         * match prefix here, `n` is the constant Helix left-motion.)
+         * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         m_handy: m_handy_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            /* tap-preferred, NOT hold-preferred: under hold-preferred ANY
-             * other key press commits to the hold, so `m` followed quickly by
-             * another key would fire F20. tap-preferred takes the hold ONLY on
-             * term expiry - i.e. exactly "held alone from rest", which is the
-             * gesture this key is for.
-             *
-             * require-prior-idle-ms is urob's timeless-HRM parameter: pressed
-             * within 150 ms of another key it resolves to a tap IMMEDIATELY,
-             * with no timeout. So the trigger is unavailable mid-flow and
-             * instant from rest, which is the semantics Will asked for - and
-             * a better answer than enlarging tapping-term-ms, which slows the
-             * hold for everyone without making the tap safer.
-             * See ~/Assistants/skills/zmk/references/urob-patterns.md */
-            flavor = "tap-preferred";
+            /* 🚨 NOT tap-preferred + require-prior-idle-ms. Tried 2026-08-31
+             * and it reproduced a failure already recorded in
+             * ZMK-HANDY-REMOTE-LESSONS.md rule 2: prior-idle forces the TAP,
+             * and continuing to hold then leaves the tap binding pressed, so
+             * the host OS-repeats the letter - `mmmmmmm` and no beep. */
+            flavor = "hold-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <QUICK_TAP_MS>;
-            require-prior-idle-ms = <150>;
             bindings = <&kp>, <&kp>;
         };
 
@@ -270,41 +282,30 @@
          * board, which is why the arrow row leaves position 15 empty. The rare
          * binding gets the awkward key; the four new ones get comfortable
          * columns and align with N E I O above. */
-        /* 🚨 POSITION 16 DOES NOT WORK ON THIS LAYER. MEASURED 2026-08-30.
-         * `&kp LEFT` below has been here since the FIRST commit (5a4f2db) and
-         * there is no evidence it has EVER fired. Outer thumb + N emits
-         * nothing, or falls through to BASE and gives a held `n`, while
-         * 17/18/19 (DOWN/UP/RIGHT) and 25/26/29 all resolve on PAGE correctly
-         * in the same held-thumb window. Position 16 works fine on BASE (n,
-         * F20) and on HELIX (n) - it is this layer specifically.
+        /* ⚠️ RETRACTED 2026-08-31. This block previously asserted "position
+         * 16 does not work on this layer", and it was WRONG. Measured with
+         * chocofi-trace: outer thumb + N emits cleanly (F13 fired three times
+         * from this position in a diagnostic image, including a 2.0 s hold).
          *
-         * Position 16 is the only key on this row carrying a hold-tap on BASE
-         * (&n_handy F20 N, as it was then - the behaviour is now m_handy on 15).
-         * That asymmetry is the whole suspect list.
+         * The real defect was ROLL SENSITIVITY on the page thumb, not a dead
+         * position. Under tap-preferred the hold arrived only on term expiry,
+         * so a letter pressed inside 180 ms left the thumb resolving as a TAP:
+         * a bare Space, letter swallowed. Deliberate press worked; fast roll
+         * silently did not. Fixed by balanced + hold-trigger-key-positions on
+         * page_lt above.
          *
-         * ALREADY TRIED AND REVERTED - do not repeat: hold-preferred plus
-         * hold-trigger-key-positions on page_lt (4ce83e6). It did NOT fix
-         * position 16, and it re-opened the Space+U -> &host_mac hazard,
-         * because positional hold-tap only guards a key pressed DURING the
-         * tapping term - it cannot guard a thumb already held past it.
-         *
-         * 81e8d98 moved LEFT to position 15 as a workaround and it WORKED -
-         * eight clean LEFTs with human 89-120 ms durations, versus the 0.2 ms
-         * synthesised pairs position 16 produced. That is the evidence for the
-         * hypothesis: the dead PAGE position tracked the HOLD-TAP, not the key.
-         *
-         * SO IT IS NOW BACK ON 16, with the hold-tap moved to 15 (see m_handy).
-         * If the hypothesis holds, 16 works and 15 is the newly dead one -
-         * which is why 15 is &none here rather than carrying anything. That
-         * restores the Colemak-DH N E I O alignment.
-         *
-         * If 16 is STILL dead, the hypothesis is wrong: revert to 81e8d98,
-         * which puts LEFT on 15 and is known to work.
+         * 🚨 METHOD NOTE, because this cost most of a day: every "the board
+         * emitted nothing" reading that led to the false finding came from an
+         * instrument fault or a technique difference - a tracer watching the
+         * BLE node while USB carried the traffic, a stale fd after a
+         * reconnect, an expired tracer, and one test where the wrong thumb was
+         * held. MEASURE THE MEASURER FIRST. A negative result from an
+         * uncorroborated instrument is not evidence.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         page_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
-                &none  &none  &none  &none  &none      &kp F14  &kp F13  &kp DOWN  &kp UP  &kp RIGHT
+                &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &kp MINUS  &kp LG(LS(LEFT))  &kp LG(LS(DOWN))  &kp LG(LS(UP))  &kp LG(LS(RIGHT))
                                 &none  &none  &none      &trans  &trans  &trans
             >;
