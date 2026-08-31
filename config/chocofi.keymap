@@ -19,7 +19,8 @@
  * hold-preferred: tap-preferred never promoted to F20 (OS n-repeat instead).
  * No combos on N (ZMK combos cannot auto-repeat).
  *
- * Hosts: outer thumb (PAGE) + J / L / U (iPhone / nimbini / Mac).
+ * Hosts: outer thumb (PAGE) + ' + J / L / U (iPhone / nimbini / Mac).
+ * Combos, not bare keys - Space+l/U/y are Helix leader bindings.
  *
  * Boot default: letter base (nimbini slot is the intended pair).
  * Kindle arrows: hold outer thumb (PAGE), not a hidden default layer.
@@ -213,6 +214,49 @@
             layers = <HELIX>;
         };
 
+        /* HOST SELECT, moved off single keys 2026-08-31 after a second
+         * accidental profile switch and a full re-pair.
+         *
+         * The old bindings sat on PAGE + J / L / U as BARE KEYS, and three of
+         * those five top-row keys are live Helix leader bindings:
+         *   Space+l = clipboard paste
+         *   Space+U = DAYPAGE FLUSH   <- the one that kept biting
+         *   Space+y = clipboard copy
+         * So a mistimed leader sequence could silently move the board to
+         * another host, which presents as "the keyboard has stopped working".
+         * Positional hold-tap guards the ROLL but cannot guard a thumb already
+         * held past its term, so the bare keys had to go.
+         *
+         * Now: inner thumb NOT involved - hold the OUTER thumb (PAGE), then
+         * press the PINKY (') together with the old letter. Two keys at
+         * opposite ends of the row plus a held thumb: three deliberate
+         * actions, unrollable, and the letters alone now do nothing.
+         *
+         *   PAGE + ' + J  -> iPhone   (profile 0)
+         *   PAGE + ' + L  -> nimbini  (profile 1)
+         *   PAGE + ' + U  -> Mac      (profile 2)
+         */
+        combo_host_iphone {
+            timeout-ms = <50>;
+            key-positions = <9 5>;
+            bindings = <&host_iphone>;
+            layers = <PAGE>;
+        };
+
+        combo_host_nimbini {
+            timeout-ms = <50>;
+            key-positions = <9 6>;
+            bindings = <&host_nimbini>;
+            layers = <PAGE>;
+        };
+
+        combo_host_mac {
+            timeout-ms = <50>;
+            key-positions = <9 7>;
+            bindings = <&host_mac>;
+            layers = <PAGE>;
+        };
+
         /* Esc while inner held (HELIX). Not a BASE 2-key bootloader. */
         combo_bootloader {
             timeout-ms = <80>;
@@ -304,7 +348,7 @@
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         page_layer {
             bindings = <
-                &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
+                &none  &none  &none  &none  &none      &none  &none  &none  &none  &none
                 &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &kp MINUS  &kp LG(LS(LEFT))  &kp LG(LS(DOWN))  &kp LG(LS(UP))  &kp LG(LS(RIGHT))
                                 &none  &none  &none      &trans  &trans  &trans
