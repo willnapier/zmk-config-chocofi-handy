@@ -52,6 +52,19 @@ jobs:
       - name: Rename Handy firmware
         run: cp build/zephyr/zmk.uf2 chocofi_right_handy.uf2
 
+      # Capture the COMPILED devicetree for the Handy build, BEFORE the
+      # settings_reset build below wipes build/ with --pristine. Added
+      # 2026-08-31 for design-forum thread term-chocofi-page-pos16-left: the
+      # .keymap SOURCE is not the firmware, and the open question is whether
+      # the PAGE cell at position 16 actually compiles to LEFT's usage.
+      - name: Capture compiled devicetree (Handy)
+        run: |
+          cp build/zephyr/zephyr.dts chocofi_zephyr.dts
+          cp build/zephyr/include/generated/zephyr/devicetree_generated.h \
+             chocofi_devicetree_generated.h || \
+          cp build/zephyr/include/generated/devicetree_generated.h \
+             chocofi_devicetree_generated.h
+
       - name: Build settings_reset
         run: >
           west build --pristine -s zmk/app -b nice_nano_v2 --
@@ -68,3 +81,5 @@ jobs:
           path: |
             chocofi_right_handy.uf2
             settings_reset.uf2
+            chocofi_zephyr.dts
+            chocofi_devicetree_generated.h
