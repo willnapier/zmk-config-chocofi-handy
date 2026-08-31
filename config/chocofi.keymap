@@ -80,24 +80,37 @@
             bindings = <&kp>, <&kp>;
         };
 
-        /* Tap N / Helix left; tap-then-hold repeats n; hold-from-rest = F20 Handy.
-         * hold-preferred: same class as the inner-thumb Handy that worked.
-         * tap-preferred + prior-idle left N held, so the host OS-repeated n.
+        /* HANDY LIVES ON M, NOT N (2026-08-30, Will's design).
          *
-         * 280 -> 400 ms on 2026-08-30. Being a hold-tap, `n` is NEVER sent on
-         * key-down; it is synthesised on RELEASE, and any press past the term
-         * becomes F20 instead - a silent Handy toggle with no character at
-         * all. At 280 ms a merely lazy tap crossed that cliff, which is why
-         * `n` felt intermittent ("sometimes it works, sometimes not") when the
-         * hardware was fine. Measured tap durations on this board's plain keys
-         * are ~100-120 ms, so 400 ms leaves a wide margin while a deliberate
-         * dictation hold still reaches F20 comfortably.
-         * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
-        n_handy: n_handy_tap {
+         * Why it moved. A hold-tap NEVER sends its tap on key-down - the tap
+         * is synthesised on RELEASE, and any press past the tapping term
+         * becomes the hold instead. On N that was intolerable twice over:
+         * N is the constant Helix left-motion, so every left-move was delayed
+         * and a merely lazy tap silently became a Handy toggle with no `n`;
+         * and raising the term to fix that made dictation - the board's MAIN
+         * FUNCTION - wait 400 ms before it would start.
+         *
+         * M is the right key to spend. On this board the BASE letters are
+         * Helix commands, and `m` is only the rarely-used match prefix, while
+         * `n` is pressed constantly. So M carries the hold-tap and N goes back
+         * to a plain &kp, sent on key-down with no term at all.
+         *
+         * 200 ms, deliberately short: this is the dictation trigger and it
+         * should feel immediate. Measured tap durations on this board's plain
+         * keys are ~90-120 ms, so a normal `m` still resolves as a tap.
+         *
+         * 🚨 IT ALSO TESTS THE POSITION-16 HYPOTHESIS. The dead PAGE position
+         * tracked the HOLD-TAP, not the key: 16 carried one and was dead on
+         * PAGE, 15 carried none and worked. Moving the hold-tap to 15 should
+         * move the dead PAGE position to 15 with it, freeing 16 for LEFT and
+         * restoring the Colemak N E I O alignment. If 16 is STILL dead after
+         * this, the hypothesis is wrong - revert to 81e8d98, which has LEFT
+         * on 15 and works. See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
+        m_handy: m_handy_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "hold-preferred";
-            tapping-term-ms = <400>;
+            tapping-term-ms = <200>;
             quick-tap-ms = <QUICK_TAP_MS>;
             bindings = <&kp>, <&kp>;
         };
@@ -189,7 +202,7 @@
         base_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &kp J  &kp L  &kp U  &kp Y  &kp SQT
-                &none  &none  &none  &none  &none      &kp M  &n_handy F20 N  &kp E  &kp I  &kp O
+                &none  &none  &none  &none  &none      &m_handy F20 M  &kp N  &kp E  &kp I  &kp O
                 &none  &none  &none  &none  &none      &kp K  &kp H  &comma_semi  &dot_colon  &kp P
                                 &none  &none  &none      &thumb_lt HELIX RET  &thumb_mt LSHFT BSPC  &page_lt PAGE SPACE
             >;
@@ -252,7 +265,8 @@
          * F20) and on HELIX (n) - it is this layer specifically.
          *
          * Position 16 is the only key on this row carrying a hold-tap on BASE
-         * (&n_handy F20 N). That asymmetry is the whole suspect list.
+         * (&n_handy F20 N, as it was then - the behaviour is now m_handy on 15).
+         * That asymmetry is the whole suspect list.
          *
          * ALREADY TRIED AND REVERTED - do not repeat: hold-preferred plus
          * hold-trigger-key-positions on page_lt (4ce83e6). It did NOT fix
@@ -260,20 +274,23 @@
          * because positional hold-tap only guards a key pressed DURING the
          * tapping term - it cannot guard a thumb already held past it.
          *
-         * DONE 2026-08-30: LEFT moved to position 15 (M) and 16 is now &none.
-         * The cursor row is therefore M E I O, not N E I O. It loses the
-         * Colemak-DH N-alignment, but both rows now work: cursor movement on
-         * 15/17/18/19 and niri window focus on 26/27/28/29, which is what was
-         * actually wanted. 16 is left &none deliberately - as &kp LEFT it fell
-         * through to BASE and typed a held `n`, which is worse than nothing.
+         * 81e8d98 moved LEFT to position 15 as a workaround and it WORKED -
+         * eight clean LEFTs with human 89-120 ms durations, versus the 0.2 ms
+         * synthesised pairs position 16 produced. That is the evidence for the
+         * hypothesis: the dead PAGE position tracked the HOLD-TAP, not the key.
          *
-         * Positions 17/18/19 are untouched, so down/up/right keep their homes;
-         * only left moved, one column inward to the inner-index reach.
+         * SO IT IS NOW BACK ON 16, with the hold-tap moved to 15 (see m_handy).
+         * If the hypothesis holds, 16 works and 15 is the newly dead one -
+         * which is why 15 is &none here rather than carrying anything. That
+         * restores the Colemak-DH N E I O alignment.
+         *
+         * If 16 is STILL dead, the hypothesis is wrong: revert to 81e8d98,
+         * which puts LEFT on 15 and is known to work.
          * See ~/Assistants/shared/ZMK-HANDY-REMOTE-LESSONS.md */
         page_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
-                &none  &none  &none  &none  &none      &kp LEFT  &none  &kp DOWN  &kp UP  &kp RIGHT
+                &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &kp MINUS  &kp LG(LS(LEFT))  &kp LG(LS(DOWN))  &kp LG(LS(UP))  &kp LG(LS(RIGHT))
                                 &none  &none  &none      &trans  &trans  &trans
             >;
