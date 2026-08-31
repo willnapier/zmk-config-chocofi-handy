@@ -293,8 +293,14 @@
          *   E -> F19          Handy cancel
          *   , -> PgDn          scroll DOWN  ] BARE page keys, handled by the
          *   . -> PgUp          scroll UP    ] APPLICATION
-         *   I -> Shift+PgDn    scroll DOWN  ] WezTerm scrollback, handled by
-         *   O -> Shift+PgUp    scroll UP    ] the TERMINAL
+         *   U -> Shift+PgDn    scroll DOWN  ] WezTerm scrollback, handled by
+         *   Y -> Shift+PgUp    scroll UP    ] the TERMINAL
+         *
+         * COLUMN DISCIPLINE: down/up ALWAYS live on the middle and ring
+         * columns, on every board and every layer - E/I on the home row,
+         * , /. on the bottom row, and now U/Y on the top row. An earlier
+         * version of this put the terminal pair on I/O, which made I mean
+         * DOWN when it means UP everywhere else. Do not do that again.
          *
          * 🚨 TWO PAIRS, MEASURED 2026-08-31 — NEITHER IS UNIVERSAL. The old
          * comment here claimed Shift+Page* was "identical in Claude Code,
@@ -327,8 +333,8 @@
          * thumb is held. Keep the system-wide assignment. */
         helix_layer {
             bindings = <
-                &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &kp LS(PG_DN)  &kp LS(PG_UP)
+                &none  &none  &none  &none  &none      &trans  &trans  &kp LS(PG_DN)  &kp LS(PG_UP)  &trans
+                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &none  &none
                 &none  &none  &none  &none  &none      &kp X   &trans  &kp PG_DN  &kp PG_UP  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;
