@@ -306,7 +306,7 @@
         helix_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
-                &none  &none  &none  &none  &none      &kp T   &kp LEFT  &kp F19  &kp F13  &kp LEFT
+                &none  &none  &none  &none  &none      &kp T   &kp N  &kp F19  &none  &none
                 &none  &none  &none  &none  &none      &kp X   &trans  &kp LS(PG_DN)  &kp LS(PG_UP)  &kp FSLH
                                 &none  &none  &none      &trans  &trans  &trans
             >;
