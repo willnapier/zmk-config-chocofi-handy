@@ -109,9 +109,23 @@
         m_handy: m_handy_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "hold-preferred";
+            /* tap-preferred, NOT hold-preferred: under hold-preferred ANY
+             * other key press commits to the hold, so `m` followed quickly by
+             * another key would fire F20. tap-preferred takes the hold ONLY on
+             * term expiry - i.e. exactly "held alone from rest", which is the
+             * gesture this key is for.
+             *
+             * require-prior-idle-ms is urob's timeless-HRM parameter: pressed
+             * within 150 ms of another key it resolves to a tap IMMEDIATELY,
+             * with no timeout. So the trigger is unavailable mid-flow and
+             * instant from rest, which is the semantics Will asked for - and
+             * a better answer than enlarging tapping-term-ms, which slows the
+             * hold for everyone without making the tap safer.
+             * See ~/Assistants/skills/zmk/references/urob-patterns.md */
+            flavor = "tap-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <QUICK_TAP_MS>;
+            require-prior-idle-ms = <150>;
             bindings = <&kp>, <&kp>;
         };
 
@@ -290,7 +304,7 @@
         page_layer {
             bindings = <
                 &none  &none  &none  &none  &none      &host_iphone  &host_nimbini  &host_mac  &none  &none
-                &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
+                &none  &none  &none  &none  &none      &kp F14  &kp F13  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &kp MINUS  &kp LG(LS(LEFT))  &kp LG(LS(DOWN))  &kp LG(LS(UP))  &kp LG(LS(RIGHT))
                                 &none  &none  &none      &trans  &trans  &trans
             >;
