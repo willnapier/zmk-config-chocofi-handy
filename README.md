@@ -8,15 +8,13 @@ Shield files are vendored from `willnapier/temper-zmk`. `CONFIG_ZMK_SPLIT=n` so 
 
 ## Hosts
 
-Host select is on **PAGE** (outer thumb held). Letter-row combos (`n+e` / `e+i` / `i+o`) were removed: they delayed and dropped `n` (and `e`/`i`) after a pause.
+Host select is a **PAGE combo** (outer thumb held, then `'` together with the letter). Bare J/L/U on PAGE do nothing — they used to steal Helix `Space+l` / `Space+U`.
 
-| Outer held + | Profile | Machine |
-|-------|---------|---------|
-| **J** | 0 | iPhone |
-| **L** | 1 | nimbini |
-| **U** | 2 | Mac |
-| **'** | — | bootloader |
-| **H** | — | `-` |
+| Outer held + | Profile | Machine | Layer |
+|-------|---------|---------|-------|
+| **`'` + J** | 0 | iPhone | IPHONE: **M = iOS dictation** (double Control) |
+| **`'` + L** | 1 | nimbini | BASE: hold **M** = Handy F20 |
+| **`'` + U** | 2 | Mac | BASE: hold **M** = Handy F20 |
 
 Nimbini’s first pair landed on slot 0. Kindle-on-Mac is still PAGE arrows on the home row, not a fourth profile.
 
@@ -30,7 +28,9 @@ Nimbini’s first pair landed on slot 0. Kindle-on-Mac is still PAGE arrows on t
  Enter  Bspc Space
 ```
 
-No home-row mods except **N**: tap `n` / Helix left; tap-then-hold repeats `n` (`quick-tap-ms` 175, same as Totem); hold-from-rest (~280 ms, **hold-preferred**) = **F20 Handy**. No combos include `n`. If a cold hold of `N` still OS-repeats `n`, the UF2 on the board is not this one (check: inner-thumb hold must **not** start Handy).
+**Handy is hold-from-rest `M`** (F20) on nimbini and Mac. **On the iPhone layer, tap `M`** sends double-Control, which is iOS’s hardware-keyboard dictation shortcut. iOS: **Settings → General → Keyboard → Enable Dictation**, **Dictation Shortcut = Control**. No beep — the on-screen waveform is the cue. Tap `M` again to stop.
+
+`N` is a plain letter (Helix left). No combos include `n`.
 
 ### Thumbs
 
@@ -83,9 +83,9 @@ If this nice!nano already has other firmware, **`settings_reset.uf2` first**, th
 2. Flash **`settings_reset.uf2`** once.
 3. Double-tap reset again.
 4. Flash **`chocofi_right_handy.uf2`**.
-5. Hold **outer thumb + L**, pair **Chocofi-Handy** on nimbini.
-6. Hold **outer thumb + U**, pair on the Mac.
-7. Hold **outer thumb + J**, pair on the iPhone.
+5. Outer thumb + **`'` + L**, pair **Chocofi-Handy** on nimbini.
+6. Outer thumb + **`'` + U**, pair on the Mac.
+7. Outer thumb + **`'` + J**, pair on the iPhone. Then tap **M** in a text field to start iOS dictation.
 
 Use `cp -X` on macOS if Finder copies grow xattrs and the board rejects the UF2.
 

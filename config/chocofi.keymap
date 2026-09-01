@@ -14,13 +14,14 @@
  *   Middle (34) tap Backspace, hold Shift
  *   Outer  (35) tap Space, hold PAGE
  *
- * Handy: hold N (hold-preferred 280 ms, quick-tap-ms 175).
- * Tap N = n / Helix left. Tap-then-hold N = repeat n. Hold-from-rest = F20.
- * hold-preferred: tap-preferred never promoted to F20 (OS n-repeat instead).
- * No combos on N (ZMK combos cannot auto-repeat).
+ * Handy: hold M (hold-preferred 200 ms, quick-tap-ms 175) = F20 on BASE.
+ * On IPHONE (locked by the iPhone host combo), tap M = double LCTRL.
+ * N is a plain letter. No combos on N (ZMK combos cannot auto-repeat).
  *
  * Hosts: outer thumb (PAGE) + ' + J / L / U (iPhone / nimbini / Mac).
  * Combos, not bare keys - Space+l/U/y are Helix leader bindings.
+ * iPhone also &to IPHONE, so M is iOS dictation (double LCTRL) not F20.
+ * nimbini/Mac &to BASE, restoring hold-M Handy.
  *
  * Boot default: letter base (nimbini slot is the intended pair).
  * Kindle arrows: hold outer thumb (PAGE), not a hidden default layer.
@@ -37,6 +38,7 @@
 #define BASE  0
 #define HELIX 1
 #define PAGE  2
+#define IPHONE 3
 
 #define QUICK_TAP_MS 175
 
@@ -158,22 +160,42 @@
     };
 
     macros {
+        /* iOS hardware-keyboard dictation: double-press Control.
+         * Settings → General → Keyboard → Enable Dictation, and
+         * Dictation Shortcut = Control. One tap of M on the IPHONE
+         * layer is start/stop. No beep — the waveform is the cue.
+         * Apple's double-press window is ~300 ms; 80 ms between taps
+         * is distinct without missing the window. */
+        ios_dict: ios_dict {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <80>;
+            tap-ms = <40>;
+            bindings = <&kp LCTRL>, <&kp LCTRL>;
+        };
+
         host_iphone: host_iphone {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &bt BT_SEL 0>;
+            bindings
+                = <&macro_tap &bt BT_SEL 0>
+                , <&macro_tap &to IPHONE>;
         };
 
         host_nimbini: host_nimbini {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &bt BT_SEL 1>;
+            bindings
+                = <&macro_tap &bt BT_SEL 1>
+                , <&macro_tap &to BASE>;
         };
 
         host_mac: host_mac {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &bt BT_SEL 2>;
+            bindings
+                = <&macro_tap &bt BT_SEL 2>
+                , <&macro_tap &to BASE>;
         };
     };
 
@@ -232,9 +254,9 @@
          * opposite ends of the row plus a held thumb: three deliberate
          * actions, unrollable, and the letters alone now do nothing.
          *
-         *   PAGE + ' + J  -> iPhone   (profile 0)
-         *   PAGE + ' + L  -> nimbini  (profile 1)
-         *   PAGE + ' + U  -> Mac      (profile 2)
+         *   PAGE + ' + J  -> iPhone   (profile 0, &to IPHONE so M = dictation)
+         *   PAGE + ' + L  -> nimbini  (profile 1, &to BASE)
+         *   PAGE + ' + U  -> Mac      (profile 2, &to BASE)
          */
         combo_host_iphone {
             timeout-ms = <50>;
@@ -371,6 +393,27 @@
                 &none  &none  &none  &none  &none      &none  &none  &none  &none  &none
                 &none  &none  &none  &none  &none      &none  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT
                 &none  &none  &none  &none  &none      &kp MINUS  &kp LG(LS(LEFT))  &kp LG(LS(DOWN))  &kp LG(LS(UP))  &kp LG(LS(RIGHT))
+                                &none  &none  &none      &trans  &trans  &trans
+            >;
+        };
+
+        /* IPHONE: locked by host_iphone (&to). Highest layer, so it wins
+         * over BASE for any non-trans position. Only M is rebound:
+         * ios_dict (double LCTRL) instead of hold-M F20, which iOS
+         * ignores. Everything else, including thumbs, &trans through
+         * to BASE, so PAGE host-select and HELIX still work.
+         *
+         * Urchin's iPhone layer did NOT have this — N/O were arrows
+         * only. Added 2026-09-01 so hold/tap M starts iOS dictation
+         * with the same finger as Handy on the computers.
+         *
+         * Leave this layer with &to BASE (nimbini/Mac combos) or M
+         * keeps sending Control-Control to those hosts. */
+        iphone_layer {
+            bindings = <
+                &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
+                &none  &none  &none  &none  &none      &ios_dict  &trans  &trans  &trans  &trans
+                &none  &none  &none  &none  &none      &trans  &trans  &trans  &trans  &trans
                                 &none  &none  &none      &trans  &trans  &trans
             >;
         };
